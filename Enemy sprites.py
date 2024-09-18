@@ -105,13 +105,6 @@ class Bullet(p.sprite.Sprite):
         # Ensure all fields are numeric
         # self.rect = p.Rect(x, y, 10, 20)  # Use p.Rect for clarity
         self.speedy = -10
-        
-    def check_shot(self, mobs1):
-        global running
-        global lives
-        if self.rect.colliderect(mobs1): 
-            print("Mob killed")
-            self.kill()
     
     # This removes the bullet sprite when it hits a mob
 
@@ -119,15 +112,11 @@ class Bullet(p.sprite.Sprite):
 
         self.kill()
 
-
-
     def update(self):
         self.rect.y += self.speedy
         # Kill if it moves off of the screen
         if self.rect.bottom < 0:
             self.kill()
-    
-
 
 # Creating a sprite for the enemy mobs / sprites
 class Mob(p.sprite.Sprite):
@@ -188,6 +177,7 @@ for i in range(10):
     mobs.add(m)
 
 check_collision = False
+
 #---------------------END OF SET UP------------------------#
 
 #--------------------MAIN GAME LOOP------------------------#
@@ -195,6 +185,40 @@ check_collision = False
 #While true means while the game is running this code will run
 
 lives = 3
+
+# Start menu and settnig dimensions
+screen_width = 800
+screen_height = 600
+screen = p.display.set_mode((screen_width, screen_height))
+p.display.set_caption ("Game menu ")
+
+play_button_image = p.image.load("play_button.png")
+play_button_rect = play_button_image.get_rect(center=(screen_width // 2, screen_height // 2))
+
+
+font = p.font.Font(None, 36)
+text = font.render("Play", True, (255, 255, 255))
+text_rect = text.get_rect(center=(screen_width // 2, play_button_rect.top - 50))
+
+running = True
+while running:
+    for event in p.event.get():
+        if event.type == p.QUIT:
+            running = False
+
+        #Interactions and mouse clicks
+        if event.type == p.MOUSEBUTTONDOWN:
+
+            if play_button_rect.collidepoint(event.pos):
+                # Start the game
+
+                 #Filling the screen with a background colour
+                screen.fill((0, 0, 0))
+                screen.fill
+
+    screen.blit(play_button_image, play_button_rect)
+    screen.blit(text, text_rect)
+
 
 #Setting a variable for when the game is running and using it in the main game loop
 running = True
@@ -227,19 +251,22 @@ while running:
         mobs.add(m)
 
         print("Mob hit")
+    
+    # if mobs == 0
+
 
     for mob in mobs:
-            mob.check_collision(player)
-            mob.check_shot(mobs1)
+        mob.check_collision(player)
+        mob.check_shot(mobs1)
 
-    for bullet in bullets:
-            bullet.check_shot(mobs1)
+    # for bullet in bullets:
+    #         bullet.check_shot(mobs1)
 
     
     if Bullet is not None:
         bullets.update()
 
-    #Update
+     
     all_sprites.update()
 
         
